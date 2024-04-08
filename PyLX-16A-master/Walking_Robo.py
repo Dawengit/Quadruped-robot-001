@@ -29,97 +29,107 @@ except ServoTimeoutError:
 # SET HOME POSITIONS
     # The first home strategy is for the robot's legs to be in four corners of a square
     # The second home strategy is for the robot's legs to be in a straight line
+# apply the first home strategy
 # leg1
-home1 = 110.0+5
-#home2 = 82
+home1=134.88
+home2=86.16
 # leg2
-home3 = 140.0
-#home4 = 85.0
+home3=130.08
+home4=85.44
 # leg3
-home5 = 235.0
-#home6 = 144.0
+home5=232.8
+home6=145.2
 # leg4
-home7 = 80.0+5
-#home8 = 73.0
+home7=106.32
+home8=68.88
 
-# SET ANGLE LIMITS
+# set safe angle limits
+# SET ANGLE LIMITS bias
+x=10
 # leg1
-servo1.set_angle_limits(110,184)
-servo2.set_angle_limits(82,134)
-#home2=(134+82)/2=108
-home2=(134+82)/2
+servo1.set_angle_limits(110-x,184+x)
+servo2.set_angle_limits(82-x,134+x)
 # leg2
-servo3.set_angle_limits(76, 148)
-servo4.set_angle_limits(27, 85)
-# home4=(27+85)/2=56
-home4=(27+85)/2
-
+servo3.set_angle_limits(76-x, 148+x)
+servo4.set_angle_limits(27-x, 90+x)
 # leg3
-servo5.set_angle_limits(166, 240)
-servo6.set_angle_limits(87,144)
-# home6=(87+144)/2=115.5
-home6=(87+144)/2
-
+servo5.set_angle_limits(166-x, 240)
+servo6.set_angle_limits(87-x,150+x)
 # leg4
-servo7.set_angle_limits(80,160)
-servo8.set_angle_limits(73,127)
-# home8=(73+127)/2=100
-home8=(73+127)/2
+servo7.set_angle_limits(80-x,160+x)
+servo8.set_angle_limits(65-2*x,127+x)
 
-# MOVE SERVOS TO HOME POSITIONS
-
+# move servos to home positions
 servo1.move(home1)
+time.sleep(0.05)
 servo2.move(home2)
+time.sleep(0.05)
 servo3.move(home3)
+time.sleep(0.05)
 servo4.move(home4)
+time.sleep(0.05)
 servo5.move(home5)
+time.sleep(0.05)
 servo6.move(home6)
+time.sleep(0.05)
 servo7.move(home7)
+time.sleep(0.05)
 servo8.move(home8)
+time.sleep(0.05)
 
 # Gait coding
 # One cycle of gait
+135.6
+110.4
+130.08
+56.4
+232.8
+117.84
+101.52
+101.52
 # 1. move leg 1 and leg 4
 # move leg 1 backward and leg 4 forward
-# leg1 position 1 (home) to position 2a (servo1, servo2)= (110, 82) to (115, 134)
-# leg4 position 1 (home) to position 2d (servo7, servo8)= (80, 73) to (85, 127)
+# leg1 position 1 (home) to position 2a (servo1, servo2)= (134,86) to (135.6, 110.4)
+# leg4 position 1 (home) to position 2d (servo7, servo8)= (106,68) to (101.52，101，52)
 
-# 2. move leg 2 and leg 3 
+# 2. move leg 2 and leg 3
 # move leg 2 backward and leg 3 forward
-# leg2 position 1 (home) to position 2b (servo3, servo4)= (140, 85) to (135, 27)
-# leg3 position 1 (home) to position 2c (servo5, servo6)= (240,144) to (240, 87)
+
+# leg2 position 1 (home) to position 2b (servo3, servo4)= (130, 85) to (130, 56)
+# leg3 position 1 (home) to position 2c (servo5, servo6)= (232,145) to (232, 117)
 
 # 3. move leg 1 and leg 4
 # move leg 1 forward and leg 4 backward
-# leg1 position 2a (servo1, servo2) to position 1 (home)= (115, 134) to (110, 82)
-# leg4 position 2d (servo7, servo8) to position 1 (home)= (85, 127) to (80, 73)
+
+# leg1 position 2a (servo1, servo2) to position 1 (home)= (135.6, 110.4) to (134, 86)
+# leg4 position 2d (servo7, servo8) to position 1 (home)= (101.52, 101.52) to (106, 68)
 
 # 4. move leg 2 and leg 3
 # move leg 2 forward and leg 3 backward
-# leg2 position 2b (servo3, servo4) to position 1 (home)= (135, 27) to (140, 85)
-# leg3 position 2c (servo5, servo6) to position 1 (home)= (240, 87) to (240, 144)
+
+# leg2 position 2b (servo3, servo4) to position 1 (home)= (130, 56) to (130, 85)
+# leg3 position 2c (servo5, servo6) to position 1 (home)= (232, 117) to (232, 145)
 t=0
 while True:
     # 1. move leg 1 and leg 4
     # move leg 1 backward and leg 4 forward
     # apply sin and cos to make smooth movement to goal position
-    servo1.move(home1+sin(t)*3)
-    servo2.move(home2-sin(t)*((134-82)/2-15))
-    servo7.move(home7+sin(t)*3)
-    servo8.move(home8+sin(t)*((127-73)/2-15))
+    move_y=10
+    servo1.move(home1-abs(sin(t/2)*move_y))
+    servo2.move(home2-0.5*sin(t)*(110-86))
+    servo7.move(home7-abs(sin(t/2)*move_y))
+    servo8.move(home8-0.5*sin(t)*(68-102))
 
     time.sleep(0.05)
     # 2. move leg 2 and leg 3 9
     # move leg 2 backward and leg 3 forward
-    servo3.move(home3+sin(t)*3)
-    servo4.move(home4+sin(t)*((27-85)/2+15))
-    servo5.move(home5+sin(t)*3)
-    servo6.move(home6-sin(t)*((87-144)/2+15))
+    servo3.move(home3-abs(sin(t/2)*move_y))
+    servo4.move(home4-0.5*sin(t)*(56-85))
+    servo5.move(home5-abs(sin(t/2)*move_y))
+    servo6.move(home6-0.5*sin(t)*(145-117))
 
     time.sleep(0.05)
     t=t+0.05
-
-
 
 
 

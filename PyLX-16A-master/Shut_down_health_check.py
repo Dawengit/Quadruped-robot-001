@@ -39,7 +39,7 @@ def healthCheck():
     v2 = servo1.get_vin()
     v3 = servo1.get_vin()
     v4 = servo1.get_vin()
-    print(v1, v2, v3, v4)
+    print(v1, v2, v3, v4) 
 
     # flash servo LEDs 3 times to confirm health check complete
     for i in range(3):
